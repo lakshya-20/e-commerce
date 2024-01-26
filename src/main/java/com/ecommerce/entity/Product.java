@@ -1,6 +1,6 @@
 package com.ecommerce.entity;
 
-import com.ecommerce.request.ProductRequest;
+import com.ecommerce.request.CreateProductRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,10 +29,10 @@ public class Product {
     @Column(name = "quantity")
     private long quantity;
 
-    public Product(ProductRequest productRequest){
-        this.name = productRequest.getName();
-        this.description = productRequest.getDescription();
-        this.price = productRequest.getPrice();
-        this.quantity = productRequest.getQuantity();
+    public Product(CreateProductRequest createProductRequest){
+        this.name = createProductRequest.getName();
+        this.description = createProductRequest.getDescription();
+        this.price = createProductRequest.getPrice();
+        this.quantity = createProductRequest.getQuantity();
     }
 }
