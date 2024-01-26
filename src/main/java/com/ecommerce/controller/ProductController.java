@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 import com.ecommerce.entity.Product;
 import com.ecommerce.request.CreateProductRequest;
+import com.ecommerce.request.RebateProductPriceRequest;
 import com.ecommerce.request.UpdateProductRequest;
 import com.ecommerce.service.ProductService;
 import jakarta.validation.Valid;
@@ -33,5 +34,10 @@ public class ProductController {
     @DeleteMapping("/delete/{id}")
     public String deleteProduct(@PathVariable long id){
         return this.productService.deleteProduct(id);
+    }
+
+    @PutMapping("/rebate")
+    public Product rebate(@RequestBody RebateProductPriceRequest rebateProductPriceRequest){
+        return this.productService.rebate(rebateProductPriceRequest);
     }
 }
