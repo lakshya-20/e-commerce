@@ -1,0 +1,27 @@
+# Compiled class files
+target/
+
+# IDE-specific files
+.idea/
+*.iml
+*.iws
+
+# Maven-specific files
+mvnw
+mvnw.cmd
+.mvn/
+
+# Logs
+*.log
+
+# Compiled bytecode
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Dependency directories
+lib/
+bin/
