@@ -1,7 +1,8 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.entity.Product;
-import com.ecommerce.request.ProductRequest;
+import com.ecommerce.request.CreateProductRequest;
+import com.ecommerce.request.UpdateProductRequest;
 import com.ecommerce.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,17 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/create")
-    public Product createProduct(@Valid @RequestBody ProductRequest productRequest){
-        return this.productService.createProduct(productRequest);
+    public Product createProduct(@Valid @RequestBody CreateProductRequest createProductRequest){
+        return this.productService.createProduct(createProductRequest);
     }
 
     @GetMapping("/getById/{id}")
     public Product getById(@PathVariable long id){
         return this.productService.getById(id);
+    }
+
+    @PutMapping("/update")
+    public Product updateProduct(@Valid @RequestBody UpdateProductRequest updateProductRequest){
+        return this.productService.updateProduct(updateProductRequest);
     }
 }
