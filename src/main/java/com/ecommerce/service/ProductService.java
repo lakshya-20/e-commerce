@@ -4,6 +4,7 @@ import com.ecommerce.entity.Product;
 import com.ecommerce.exception.ProductNotFoundException;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.request.CreateProductRequest;
+import com.ecommerce.request.RebateProductPriceRequest;
 import com.ecommerce.request.UpdateProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -61,6 +62,21 @@ public class ProductService {
         else {
             return "Success"; //deleted
         }
+    }
+
+    public Product rebate(RebateProductPriceRequest rebateProductPriceRequest){
+        Product product = this.getById(rebateProductPriceRequest.getId());
+
+        if(rebateProductPriceRequest.getDiscount() > 0){
+            double discountAmount = (product.getPrice() * rebateProductPriceRequest.getDiscount()) / 100;
+            product.setPrice(product.getPrice() - discountAmount);
+        }
+        else if(rebateProductPriceRequest.getTax() > 0){
+            double taxAmount = (product.getPrice() * rebateProductPriceRequest.getTax()) / 100;
+            product.setPrice(product.getPrice() + taxAmount);
+        }
+
+        return this.productRepository.save(product);
     }
 
 }
