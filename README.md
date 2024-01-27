@@ -40,7 +40,7 @@ Spring Boot-based REST API to manage products for an e-commerce platform.
 git clone https://github.com/lakshya-20/e-commerce
 ```
 
-**Open the project in your favourite IDE, update MySQL host in application.properties and build the project.**
+**Open the project in your favourite IDE, build the project.**
 
 ## Contributing
 1. Fork it
