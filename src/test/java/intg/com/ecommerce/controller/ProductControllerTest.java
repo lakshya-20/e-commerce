@@ -3,6 +3,7 @@ package com.ecommerce.controller;
 import com.ecommerce.entity.Product;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.request.CreateProductRequest;
+import com.ecommerce.request.RebateProductPriceRequest;
 import com.ecommerce.request.UpdateProductRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -130,5 +131,59 @@ public class ProductControllerTest {
 
         String response = result.getResponse().getContentAsString();
         Assertions.assertEquals("Success", response);
+    }
+
+    @Test
+    void rebateProductTest_Tax() throws Exception {
+        CreateProductRequest createProductRequest = new CreateProductRequest(
+                "Product1",
+                "Product Description",
+                100.0,
+                100
+        );
+        Product savedProduct = productRepository.save(new Product(createProductRequest));
+
+        RebateProductPriceRequest rebateProductPriceRequest = new RebateProductPriceRequest(
+                savedProduct.getId(),
+                0.0,
+                5.0
+        );
+        String jsonRequestBody = objectMapper.writeValueAsString(rebateProductPriceRequest);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(baseURL + "/rebate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequestBody))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        Product productResponse = objectMapper.readValue(result.getResponse().getContentAsString(), Product.class);
+
+        Assertions.assertEquals(105.0, productResponse.getPrice());
+    }
+
+    @Test
+    void rebateProductTest_Discount() throws Exception {
+        CreateProductRequest createProductRequest = new CreateProductRequest(
+                "Product1",
+                "Product Description",
+                100.0,
+                100
+        );
+        Product savedProduct = productRepository.save(new Product(createProductRequest));
+
+        RebateProductPriceRequest rebateProductPriceRequest = new RebateProductPriceRequest(
+                savedProduct.getId(),
+                10.0,
+                0.0
+        );
+        String jsonRequestBody = objectMapper.writeValueAsString(rebateProductPriceRequest);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(baseURL + "/rebate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequestBody))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        Product productResponse = objectMapper.readValue(result.getResponse().getContentAsString(), Product.class);
+
+        Assertions.assertEquals(90.0, productResponse.getPrice());
     }
 }
