@@ -85,7 +85,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void updateProduct() throws Exception {
+    void updateProductTest() throws Exception {
         CreateProductRequest createProductRequest = new CreateProductRequest(
                 "Product1",
                 "Product Description",
@@ -112,5 +112,23 @@ public class ProductControllerTest {
         Product productResponse = objectMapper.readValue(result.getResponse().getContentAsString(), Product.class);
 
         Assertions.assertEquals(updateProductRequest.getName(), productResponse.getName());
+    }
+
+    @Test
+    void deleteProductTest() throws Exception {
+        CreateProductRequest createProductRequest = new CreateProductRequest(
+                "Product1",
+                "Product Description",
+                10.0,
+                100
+        );
+        Product savedProduct = productRepository.save(new Product(createProductRequest));
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete(baseURL + "/delete/" + savedProduct.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        Assertions.assertEquals("Success", response);
     }
 }
