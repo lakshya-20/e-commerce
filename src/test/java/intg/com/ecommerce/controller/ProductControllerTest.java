@@ -3,6 +3,7 @@ package com.ecommerce.controller;
 import com.ecommerce.entity.Product;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.request.CreateProductRequest;
+import com.ecommerce.request.UpdateProductRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -81,5 +82,35 @@ public class ProductControllerTest {
         Assertions.assertEquals(createProductRequest.getDescription(), productResponse.getDescription());
         Assertions.assertEquals(createProductRequest.getPrice(), productResponse.getPrice());
         Assertions.assertEquals(createProductRequest.getQuantity(), productResponse.getQuantity());
+    }
+
+    @Test
+    void updateProduct() throws Exception {
+        CreateProductRequest createProductRequest = new CreateProductRequest(
+                "Product1",
+                "Product Description",
+                10.0,
+                100
+        );
+        Product savedProduct = productRepository.save(new Product(createProductRequest));
+
+        UpdateProductRequest updateProductRequest = new UpdateProductRequest(
+                savedProduct.getId(),
+                "Updated Product",
+                savedProduct.getDescription(),
+                savedProduct.getPrice(),
+                savedProduct.getQuantity()
+        );
+        String jsonRequestBody = objectMapper.writeValueAsString(updateProductRequest);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(baseURL + "/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequestBody))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        Product productResponse = objectMapper.readValue(result.getResponse().getContentAsString(), Product.class);
+
+        Assertions.assertEquals(updateProductRequest.getName(), productResponse.getName());
     }
 }
