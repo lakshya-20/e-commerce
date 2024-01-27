@@ -61,4 +61,25 @@ public class ProductControllerTest {
         Assertions.assertEquals(createProductRequest.getPrice(), productResponse.getPrice());
         Assertions.assertEquals(createProductRequest.getQuantity(), productResponse.getQuantity());
     }
+
+    @Test
+    void getByIdTest() throws Exception {
+        CreateProductRequest createProductRequest = new CreateProductRequest(
+                "Product1",
+                "Product Description",
+                10.0,
+                100
+        );
+        Product savedProduct = productRepository.save(new Product(createProductRequest));
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(baseURL + "/getById/" + savedProduct.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        Product productResponse = objectMapper.readValue(result.getResponse().getContentAsString(), Product.class);
+
+        Assertions.assertEquals(createProductRequest.getName(), productResponse.getName());
+        Assertions.assertEquals(createProductRequest.getDescription(), productResponse.getDescription());
+        Assertions.assertEquals(createProductRequest.getPrice(), productResponse.getPrice());
+        Assertions.assertEquals(createProductRequest.getQuantity(), productResponse.getQuantity());
+    }
 }
